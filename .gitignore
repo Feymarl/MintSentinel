@@ -1,0 +1,7 @@
+.deployer.json
+.env.reactive
+out/
+cache/
+*.log
+watch_pending.out
+agent/*.log
