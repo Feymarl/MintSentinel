@@ -85,3 +85,20 @@
 - Read Reactscan contract page (browser task 815d6640) for status + subscription state + activation instructions.
 - If Inactive: follow the Debt Coverage / activation flow (read-only first, then act per instructions).
 - If Active but still no reaction: try a fresh CRON subscription test or redeploy reactive contract; escalate via Reactive docs/Discord.
+
+## VIDEO RE-RUNS STUCK — DEBT DIAGNOSIS + FIX (23:30–23:52 WIB)
+- VM restarted ~22:09 (uptime 1:14 at 23:23) — killed watch_video.sh (after check 1 only) + both vetting agents. Relaunched all three 23:23, verified alive via ps + logs.
+- **Diagnosis (Reactscan + on-chain debt() calls, 23:25–23:30):**
+  - SAFE #4 callback: Reactscan BLOCKED — CONTRACT DEBT, request tx 0x20f2fd...52a27f2a log 3, "Not sent yet". BUT debt(SAFE v3)=0 on system contract 0x8888...8888 AND on callback proxy 0x476F... — no live debt. Numbers: nonce-3 callback collected 0.017122 (CONFIRMED); nonce-4 collected only 0.015412 (BLOCKED). Hypothesis: underpaid at request time (fee varies with dest gas price) — unproven, Reactscan error text truncated ("Contract...86200000").
+  - RISKY #3 never triggered: RISKY v3 subscription INACTIVE, debt(RISKY v3)=0.017122 lREACT on 0x8888...8888 (17122000000000000 wei, confirmed on-chain, matches Reactscan). Cause: nonce-2 callback ran while the contract was nearly unfunded (0.0195 funding landed AFTER react) -> callback on credit -> debt -> subscription deactivated. Balance 0.0695 does NOT auto-cover debt.
+  - v3 has NO coverDebt() (pay() is system-only). Lesson: ALWAYS pre-fund a reactive contract BEFORE the first mint; the callback fee is ~0.0171 lREACT each.
+- **FIX executed 23:47–23:52 (all testnet, gas-only):**
+  - SAFE v3 topped up +0.03 lREACT, tx 0xca40f67dd7f8be0cd43fbe52771d0184299fefcf78af268af409a46967df0b2f -> balance 0.047466.
+  - SAFE mint #5 fired, tx 0x9cc9ceed1ddb40ce880dd6cfbfd0ca5b467b9ff6cf7e226bb99bc5bf8505ccba (block 0x35fb86d, tokenId 5, nonce 5). react() RAN (lastNonce=5), system collected 0.015412 again, balance 0.032054, debt 0 — callback in flight, watch2 polling.
+  - Faucet: +0.0025 Sepolia ETH -> lREACT, tx 0xadebaa183a6a3f8bfd54fd3e2268808c3301d0f53c4129b56df802e32d96df2d; deployer lREACT 0.442985.
+  - **SentinelReactiveV4** (v3 + coverDebt(), AbstractPayer pattern) deployed: 0x06869e9e1e0fad23f6e05a9c35893fdf97339f5d, deploy tx 0xe341ea2b0fc312f5ef18d906f3f7e88d3c6191c0cfd6fb8028ff6f727b31f28e, code verified on-chain. Funded 0.05 lREACT BEFORE any mint, tx 0x4248efe8a5654d9023afaf36534aae2462a5a44ecee07a711dbdab9a2085ed8f.
+  - RISKY mint #4 fired, tx 0x12d51ce4f7cf46cf171ed57ebb2349f2da53257b8454174b5810b34063c89994 (block 0x35fbaf7, tokenId 4, nonce 4).
+- **✅✅ RISKY LEG ROUND 2 — FULLY PROVEN ~23:49 WIB (2 min after mint):** v4 react ran (lastNonce=4), callback DELIVERED, agent verdict RISKY 45, submitVerdict tx 0x613120bdccf8338240650144aab6cf6270d00ff912f5d12ed7e93751b635174d; mints(4) status 4, score 45; **claimMint(4) REVERTED BadStatus (0x5c975bda)** as designed. V4 debt 0, balance 0.032878 (0.05 - 0.017122 fee, exact). **Pre-fund + v4 pattern WORKS.**
+- **SAFE #5: IN FLIGHT** — react ran, callback not yet delivered (watch_video2.sh, 16 checks x 2 min, log watch_video2.log). If it blocks like #4, next step is deeper diagnosis (Signer queue vs per-contract throttle) — do NOT blindly re-fire.
+- **Old video mints now orphaned:** SAFE #4 (callback BLOCKED, may still deliver — agent will vet if it lands), RISKY #3 (never triggered; RISKY v3 dead with 0.017122 debt + 0.0695 stuck). Video uses round-2 hashes: SAFE #5 (pending) + RISKY #4 (done).
+- LESSON (pkill, again): `pkill -f "watch_video.sh"` matched its own launching shell and killed the watch2 launch — NEVER pkill -f; the old watch had already exited after check 8 anyway. Kill by exact PID only.
