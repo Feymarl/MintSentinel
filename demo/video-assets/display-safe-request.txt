@@ -1,0 +1,11 @@
+$ cast receipt 0x8bd32ce76fae97797c0cc28f530441ad770f813de260b1c29c4c53a4046e5bd9
+  requestMint() — tokenId 0, nonce 0 (recorded 10 Nov 2026 ~01:08 WIB)
+transactionHash  0x8bd32ce76fae97797c0cc28f530441ad770f813de260b1c29c4c53a4046e5bd9
+status           1 (success)
+blockNumber      56629114  (0x360177a)
+contract         SentinelMint v2  0x11f163d82ba0be90dca99113b44cf1cfa719bee2
+from             0xa9Fc6461303EC7DA70A4faA7820a63EeB9c952da
+event            MintRequested(minter, tokenId, nonce)
+  minter         0xa9Fc6461303EC7DA70A4faA7820a63EeB9c952da
+  tokenId        0
+  nonce          0

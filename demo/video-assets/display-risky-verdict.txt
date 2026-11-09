@@ -1,0 +1,10 @@
+$ cast receipt 0x613120bdccf8338240650144aab6cf6270d00ff912f5d12ed7e93751b635174d
+transactionHash  0x613120bdccf8338240650144aab6cf6270d00ff912f5d12ed7e93751b635174d
+status           1 (success)
+blockNumber      56605493  (0x35fbb35)
+event            VerdictSubmitted — "RISKY 45: verified=true exact=true price=100000000000000 sim=FAIL:pay mint price"
+
+$ cast call 0x1618... "mints(uint256)(address,uint256,uint256,uint8)" 4
+minter  0xa9Fc6461303EC7DA70A4faA7820a63EeB9c952da
+status  4 (RISKY)
+score   45

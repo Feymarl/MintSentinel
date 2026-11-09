@@ -1,0 +1,34 @@
+
+> mintguard@0.1.0 vet
+> tsx src/vetting/cli.ts --ca 0x161820a753adeb14b729961e71489abe2024fe4c --chain base-sepolia --wallet 0xa9Fc6461303EC7DA70A4faA7820a63EeB9c952da
+
+{
+  "contract": "0x161820A753ADEB14b729961e71489aBe2024fe4c",
+  "chain": "base-sepolia",
+  "chainId": 84532,
+  "verified": true,
+  "exactMatch": true,
+  "isProxy": false,
+  "implementation": null,
+  "mintPriceWei": "100000000000000",
+  "freeQuotaRemaining": null,
+  "totalMinted": null,
+  "maxSupply": null,
+  "simulationOk": false,
+  "simulationError": "pay mint price",
+  "simulatedFunction": "requestMint()",
+  "risks": [
+    {
+      "code": "paid_mint",
+      "message": "Mint is NOT free: price is 100000000000000 wei. MintGuard only auto-mints gas-only drops.",
+      "severity": "warn"
+    },
+    {
+      "code": "simulation_revert",
+      "message": "eth_call simulation of requestMint() reverted: pay mint price. Mint may be gated (PoW, allowlist, window) or closed.",
+      "severity": "warn"
+    }
+  ],
+  "score": 45,
+  "verdict": "RISKY"
+}

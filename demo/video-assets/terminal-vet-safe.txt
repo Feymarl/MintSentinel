@@ -1,0 +1,29 @@
+
+> mintguard@0.1.0 vet
+> tsx src/vetting/cli.ts --ca 0x11f163d82ba0be90dca99113b44cf1cfa719bee2 --chain base-sepolia --wallet 0xa9Fc6461303EC7DA70A4faA7820a63EeB9c952da
+
+{
+  "contract": "0x11f163d82bA0be90dCa99113B44cf1Cfa719Bee2",
+  "chain": "base-sepolia",
+  "chainId": 84532,
+  "verified": true,
+  "exactMatch": true,
+  "isProxy": false,
+  "implementation": null,
+  "mintPriceWei": "0",
+  "freeQuotaRemaining": null,
+  "totalMinted": null,
+  "maxSupply": null,
+  "simulationOk": true,
+  "simulationError": null,
+  "simulatedFunction": "requestMint()",
+  "risks": [
+    {
+      "code": "price_inferred_free",
+      "message": "No mintPrice()/price()/cost() readable; the simulated mint function is nonpayable and the value-0 simulation succeeded, so the mint provably costs 0 wei (a nonpayable function reverts on any nonzero value).",
+      "severity": "info"
+    }
+  ],
+  "score": 100,
+  "verdict": "SAFE"
+}

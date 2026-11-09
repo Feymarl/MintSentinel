@@ -1,0 +1,15 @@
+$ tail agent-safe2.log
+[18:08:31Z] token 0 PENDING — vetting 0x11f163d82ba0be90dca99113b44cf1cfa719bee2...
+[18:08:33Z] token 0 verdict: SAFE 100: verified=true exact=true price=0 sim=ok
+[18:08:38Z] token 0 submitVerdict tx: 0xeaf461c3688da43d54cdbf91b8125bdd1a283d7928393cb0340b573e182eb1cf
+
+$ cast receipt 0xeaf461c3688da43d54cdbf91b8125bdd1a283d7928393cb0340b573e182eb1cf
+transactionHash  0xeaf461c3688da43d54cdbf91b8125bdd1a283d7928393cb0340b573e182eb1cf
+status           1 (success)
+blockNumber      56629241  (0x36017f9)
+event            VerdictSubmitted — "SAFE 100: verified=true exact=true price=0 sim=ok"
+
+$ cast call 0x11f163... "mints(uint256)(address,uint256,uint256,uint8)" 0
+minter  0xa9Fc6461303EC7DA70A4faA7820a63EeB9c952da
+status  3 (SAFE)
+score   100

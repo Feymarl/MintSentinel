@@ -1,0 +1,9 @@
+$ cast tx 0x12d51ce4f7cf46cf171ed57ebb2349f2da53257b8454174b5810b34063c89994
+  requestMint() — tokenId 4, nonce 4 (recorded 9 Nov 2026 ~23:47 WIB)
+from             0xa9Fc6461303EC7DA70A4faA7820a63EeB9c952da
+to               0x161820A753ADEB14b729961e71489aBe2024fe4c
+value            100000000000000 wei (0.0001 ETH)
+blockNumber      56605431  (0x35fbaf7)
+status           1 (success)
+gasUsed          61780
+event            MintRequested(minter, tokenId 4, nonce 4)

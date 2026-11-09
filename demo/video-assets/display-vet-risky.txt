@@ -1,0 +1,16 @@
+$ npm run vet -- --ca 0x161820a753adeb14b729961e71489abe2024fe4c --chain base-sepolia
+{
+  "contract": "0x161820A753ADEB14b729961e71489aBe2024fe4c",
+  "chain": "base-sepolia",
+  "verified": true,
+  "exactMatch": true,
+  "mintPriceWei": "100000000000000",
+  "simulationOk": false,
+  "simulationError": "pay mint price",
+  "risks": [
+    { "code": "paid_mint", "severity": "warn" },
+    { "code": "simulation_revert", "severity": "warn" }
+  ],
+  "score": 45,
+  "verdict": "RISKY"
+}
