@@ -31,7 +31,8 @@ Base Sepolia (84532)                Lasna (5318007)               Base Sepolia
 1. **Origin — Base Sepolia:** user calls `requestMint()` → emits
    `MintRequested(minter, tokenId, nonce)`.
 2. **Reactive — Lasna:** `SentinelReactive` subscribes to `MintRequested`,
-   drops replays, emits a `Callback` arming the gate. No off-chain watcher.
+   drops replays, requests a callback via `SYSTEM.requestCallbackV_1_0`
+   on `0x8888…8888` arming the gate. No off-chain watcher.
 3. **Destination — Base Sepolia:** the callback calls `armMint()`, which
    records PENDING. The AI agent watches for it.
 4. **AI agent (off-chain, part of the running system):** the MintGuard
@@ -49,7 +50,11 @@ Base Sepolia (84532)                Lasna (5318007)               Base Sepolia
 | RISKY | `SentinelMintRisky` (0.0001 ETH, verified) | **RISKY 45** | `claimMint()` reverts `BadStatus` — blocked | request `0x12d51ce4…c89994` · verdict `0x613120bd…5174d` · claim reverts |
 
 Demo video: [`demo/MintSentinel-demo.mp4`](demo/MintSentinel-demo.mp4) — 92 s,
-1920×1080, both legs on real on-chain data.
+1920×1080, both legs on real on-chain data. End card includes the repo
+URL (re-rendered 10 Nov 2026; narration and all other scenes unchanged).
+
+Submission pack (repo link, contracts, full proof tx sets, Rakha's 4 Dec
+checklist): [`SUBMIT_PACK.md`](SUBMIT_PACK.md).
 
 ## Deployed contracts (testnet, verified on Sourcify)
 
@@ -150,6 +155,14 @@ DEPLOYER_PRIVATE_KEY=$KEY MINT_ADDRESS=<mint> \
   `BadStatus` — blocked on-chain (9 Nov 2026 ~23:49 WIB)
 - [x] Full end-to-end demo (both legs) + video < 3 min
   (`demo/MintSentinel-demo.mp4`, 92 s)
+- [x] Submission pack ready (`SUBMIT_PACK.md`, 10 Nov 2026) — submit target
+  4 Dec 2026 (DoraHacks, track Reactive Meets AI); video must be uploaded
+  to YouTube (public) at submit time
+- [x] State re-verified 10 Nov 2026 ~02:40 WIB: both AI agents alive
+  (SAFE tree PID 12414, RISKY tree PID 12740); `mints(0)` status 5
+  (CLAIMED) score 100, `mints(4)` status 4 (RISKY) score 45; all five
+  proof tx receipts status 1; RISKY claim revert re-verified read-only
+  (`BadStatus`); lREACT SAFE v4 0.0348793 / RISKY v4 0.032878
 
 See `DEBUG_LOOP.md` for the full investigation log (trigger receipt
 analysis, debt/blacklist forensics, funding notes).

@@ -110,10 +110,18 @@ async function processToken(tokenId: number): Promise<void> {
 }
 
 async function scan(): Promise<void> {
-  const ids =
-    ONLY_TOKEN !== null
-      ? [ONLY_TOKEN]
-      : Array.from({ length: await nextTokenId() }, (_, i) => i);
+  let ids: number[];
+  try {
+    ids =
+      ONLY_TOKEN !== null
+        ? [ONLY_TOKEN]
+        : Array.from({ length: await nextTokenId() }, (_, i) => i);
+  } catch (e: any) {
+    // Transient RPC failure (e.g. publicnode timeout) must NOT kill the
+    // watch loop — log and retry on the next poll.
+    console.error(`[${new Date().toISOString()}] nextTokenId error (retry next poll): ${e?.message ?? e}`);
+    return;
+  }
   for (const id of ids) {
     try {
       await processToken(id);
